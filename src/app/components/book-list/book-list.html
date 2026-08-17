@@ -1,0 +1,132 @@
+<div class="card shadow-sm border-0">
+
+    <div class="card-body p-4">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h5 class="fw-bold mb-0">
+                My Reading List
+            </h5>
+
+            <span class="badge rounded-pill text-bg-primary">
+                {{ books().length }} books
+            </span>
+
+        </div>
+
+
+        <!-- Books -->
+        <div class="d-flex flex-column gap-2">
+
+            @for (book of books(); track book.id) {
+
+            <div class="card border">
+
+                <div class="card-body">
+
+                    <div class="row align-items-center g-3">
+
+                        <!-- Image -->
+                        <div class="col-auto">
+
+                            <img [src]="book.image" [alt]="book.title" class="img-thumbnail object-fit-cover" width="65"
+                                height="90" />
+
+                        </div>
+
+
+                        <!-- Info -->
+                        <div class="col">
+
+                            <h6 class="fw-bold mb-2">
+                                {{ book.title }}
+                            </h6>
+
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-person me-1"></i>
+                                {{ book.author }}
+                            </p>
+
+
+                            <!-- Rating -->
+                            <div class="text-warning">
+
+                                @for (star of [1, 2, 3, 4, 5]; track star) {
+
+                                @if (star <= book.rating) { <span> <i class="bi bi-star-fill"></i>
+                                    </span>
+                                    } @else {
+                                    <span> <i class="bi bi-star"></i>
+                                    </span>
+                                    }
+
+                                    }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Status + Delete -->
+                        <div class="col-auto text-end">
+
+                            @if (book.status === 'Want to Read') {
+
+                            <span class="badge rounded-pill text-bg-success mb-3">
+                                Want to Read
+                            </span>
+
+                            } @else if (book.status === 'Currently Reading') {
+
+                            <span class="badge rounded-pill text-bg-info mb-3">
+                                Currently Reading
+                            </span>
+
+                            } @else {
+
+                            <span class="badge rounded-pill text-bg-primary mb-3">
+                                Read
+                            </span>
+
+                            }
+
+                            <br />
+
+                            <button type="button" class="btn btn-sm btn-outline-danger" (click)="onRemove(book.id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            } @empty {
+
+            <div class="alert alert-light border text-center py-4">
+
+                <div class="fs-2 mb-2">
+                    <i class="bi bi-book"></i>
+                </div>
+
+                <h6 class="fw-bold">
+                    Your reading list is empty
+                </h6>
+
+                <p class="text-muted small mb-0">
+                    Add a new book to get started.
+                </p>
+
+            </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
