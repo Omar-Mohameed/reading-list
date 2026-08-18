@@ -1,9 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { BookService } from '../../services/book';
+import { RatingStarsPipe } from "../../pipes/rating-stars-pipe";
+import { CurrentlyReading } from '../../directives/currently-reading';
+import { SlicePipe, UpperCasePipe } from '@angular/common';
+import { HoverHighlight } from '../../directives/hover-highlight';
 
 @Component({
   selector: 'app-book-list',
-  imports: [],
+  imports: [RatingStarsPipe, CurrentlyReading, UpperCasePipe,SlicePipe, HoverHighlight],
   templateUrl: './book-list.html',
   styleUrl: './book-list.scss',
 })
