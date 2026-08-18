@@ -21,7 +21,7 @@
 
             @for (book of books(); track book.id) {
 
-            <div class="card border">
+            <div class="card border" appCurrentlyReading [status]="book.status" appHoverHighlight>
 
                 <div class="card-body">
 
@@ -40,31 +40,26 @@
                         <div class="col">
 
                             <h6 class="fw-bold mb-2">
-                                {{ book.title }}
+                                {{ book.title | slice:0:25 }}
                             </h6>
 
                             <p class="text-muted small mb-2">
                                 <i class="bi bi-person me-1"></i>
-                                {{ book.author }}
+                                {{ book.author | uppercase }}
                             </p>
 
 
                             <!-- Rating -->
-                            <div class="text-warning">
-
-                                @for (star of [1, 2, 3, 4, 5]; track star) {
-
-                                @if (star <= book.rating) { <span> <i class="bi bi-star-fill"></i>
-                                    </span>
-                                    } @else {
-                                    <span> <i class="bi bi-star"></i>
-                                    </span>
-                                    }
-
-                                    }
-
+                            
+                            <div class="rating text-warning">
+                                @for (star of book.rating | ratingStars; track $index) {
+                                @if (star) {
+                                <i class="bi bi-star-fill"></i>
+                                } @else {
+                                <i class="bi bi-star"></i>
+                                }
+                                }
                             </div>
-
                         </div>
 
 
