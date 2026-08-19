@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BookService } from '../../services/book';
-import { BookStatus } from '../../Models/book.model';
+import { Book, BookStatus } from '../../Models/book.model';
 
 @Component({
   selector: 'app-add-book-form',
@@ -12,6 +12,33 @@ import { BookStatus } from '../../Models/book.model';
 export class AddBookForm {
   private readonly fb = inject(FormBuilder);  // Inject FormBuilder service
   private readonly bookService = inject(BookService);
+  bookId = input<string | null>(null);
+  editComplete = output<void>();   // Output event to notify when editing is complete
+
+  constructor() {
+    effect(() => {
+      const id = this.bookId();
+      console.log('bookId:', this.bookId());
+
+      if (!id) {
+        return;
+      }
+
+      const book = this.bookService.getBookById(id);
+
+      if (!book) {
+        return;
+      }
+
+      this.bookForm.patchValue({
+        title: book.title,
+        author: book.author,
+        image: book.image,
+        rating: book.rating,
+        status: book.status,
+      });
+    });
+  }
 
   bookForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(2)]],
@@ -46,7 +73,25 @@ export class AddBookForm {
       return;
     }
 
-    const book = {
+    const id = this.bookId();
+
+    if (id) {
+      const updatedBook: Book = {
+        id,
+        title: this.bookForm.value.title!,
+        author: this.bookForm.value.author!,
+        image: this.bookForm.value.image!,
+        rating: this.bookForm.value.rating!,
+        status: this.bookForm.value.status!,
+      };
+
+      this.bookService.updateBook(updatedBook);
+      this.resetForm();
+      this.editComplete.emit();  // Emit event to notify that editing is complete
+      return;
+    }
+
+    const newBook: Book = {
       id: crypto.randomUUID(),
       title: this.bookForm.value.title!,
       author: this.bookForm.value.author!,
@@ -55,8 +100,16 @@ export class AddBookForm {
       status: this.bookForm.value.status!,
     };
 
-    this.bookService.addBook(book);
+    this.bookService.addBook(newBook);
+  }
 
-    console.log('Book added:', book);
+  resetForm(): void {
+    this.bookForm.reset({
+      title: '',
+      author: '',
+      image: '',
+      rating: 1,
+      status: 'Want to Read',
+    });
   }
 }
