@@ -50,7 +50,7 @@
 
 
                             <!-- Rating -->
-                            
+
                             <div class="rating text-warning">
                                 @for (star of book.rating | ratingStars; track $index) {
                                 @if (star) {
@@ -87,6 +87,10 @@
                             }
 
                             <br />
+
+                            <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="onEdit(book.id)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
 
                             <button type="button" class="btn btn-sm btn-outline-danger" (click)="onRemove(book.id)">
                                 <i class="bi bi-trash"></i>

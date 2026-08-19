@@ -20,7 +20,7 @@ export class BookService {
       title: 'Book Title Two',
       author: 'author Two',
       image: 'images/2.jpg',
-      rating: 3,q
+      rating: 3,
       status: 'Currently Reading' as BookStatus,
     }]);
   }
@@ -28,10 +28,19 @@ export class BookService {
   getBooks() {
     return this.books.asReadonly();
   }
+  getBookById(id: string): Book | undefined {
+    return this.books().find(book => book.id === id);
+  }
   addBook(book: Book): void {
     this.books.update(books => [...books, book]);
   }
-
+  updateBook(updatedBook: Book): void {
+    this.books.update(books =>
+      books.map(book =>
+        book.id === updatedBook.id ? updatedBook : book
+      )
+    );
+  }
   removeBook(id: string): void {
     this.books.update(books =>
       books.filter(book => book.id !== id)

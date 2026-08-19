@@ -15,12 +15,12 @@
 
       <!-- Add Book -->
       <div class="col-12 col-lg-4">
-        <app-add-book-form />
+        <app-add-book-form [bookId]="bookToEditId()" (editComplete)="onEditComplete()" />
       </div>
 
       <!-- Reading List -->
       <div class="col-12 col-lg-8">
-        <app-book-list />
+        <app-book-list (editBook)="onEditBook($event)" />
       </div>
     </div>
   </div>
