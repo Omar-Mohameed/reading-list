@@ -1,0 +1,54 @@
+@if (!isOpen()) {
+
+<button type="button" class="chat-toggle" (click)="toggleChat()">
+    <i class="bi bi-chat-dots-fill"></i>
+</button>
+
+} @else {
+
+<div class="chat-popup">
+
+    <div class="chat-header">
+        <span>
+            <i class="bi bi-robot me-2"></i>
+            AI Assistant
+        </span>
+
+        <button type="button" class="btn btn-sm text-white" (click)="toggleChat()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div #chatBody class="chat-body">
+
+        @for (message of messages(); track $index) {
+
+        <div class="message" [class.user-message]="message.sender === 'user'"
+            [class.bot-message]="message.sender === 'bot'">
+            {{ message.text }}
+        </div>
+
+        }
+        <!-- // Display loading spinner when waiting for bot response -->
+
+        @if (isLoading()) {
+        <div class="align-self-start bg-light p-2 rounded-3">
+            <div class="spinner-border spinner-border-sm text-secondary">
+            </div>
+        </div>
+        }
+
+    </div>
+
+    <div class="chat-footer">
+        <input type="text" class="form-control" placeholder="Type a message..." [(ngModel)]="message"
+            (keydown.enter)="sendMessage()" />
+
+        <button type="button" class="btn btn-primary" (click)="sendMessage()">
+            <i class="bi bi-send-fill"></i>
+        </button>
+    </div>
+
+</div>
+
+}
